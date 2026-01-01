@@ -107,7 +107,7 @@ int main() {
         pongreset.setDisplayPos(TOPRIGHT);
         AmplifyBlue.setDisplayPos(CENTERLEFT);
         AmplifyRed.setDisplayPos(CENTERRIGHT);
-        TextBox MatchBoxMain(100.0_spX, 50.0_spY, 10, 0.0, 15.0_spD, spaceMono, WHITE, WHITE);
+        TextBox MatchBoxMain(100.0_spX, 50.0_spY, 10, 0.0, 15.0_spD, &spaceMono, WHITE, WHITE);
         MatchBoxMain.setDisplayPos(TOPCENTERED);
         rest.setDisplayPos(TOPCENTERED);
 
@@ -124,8 +124,8 @@ int main() {
         EzText teamdata (raylib::Text(spaceCadet, "Team Data:"), RAYWHITE, 12.0_spD, 0.0);
         EzText matchdata (raylib::Text(spaceCadet, "Match Data:"), RAYWHITE, 12.0_spD, 0.0);
         Empty gap (raylib::Rectangle(0, 0, 1, 40));
-        TextBox TeamBox(100.0_spX, 20.0_spY, 10, 0.0, 15.0_spD, spaceMono, WHITE, WHITE);
-        TextBox MatchBox(100.0_spX, 20.0_spY, 10, 0.0, 15.0_spD, spaceMono, WHITE, WHITE);
+        TextBox TeamBox(100.0_spX, 20.0_spY, 10, 0.0, 15.0_spD, &spaceMono, WHITE, WHITE);
+        TextBox MatchBox(100.0_spX, 20.0_spY, 10, 0.0, 15.0_spD, &spaceMono, WHITE, WHITE);
 
         Button submit (100.0_spX,50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Submit"), RAYWHITE, 10.0_spD, 0.0));
         DrawableList dataList(VERTICAL, 10);  
@@ -139,7 +139,7 @@ int main() {
             dataList.add(&submit);
             dataList.setDisplayPos(CENTERLEFT);
         
-        TextBox tournamentMatch(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, spaceMono, WHITE, WHITE);
+        TextBox tournamentMatch(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
         Button tournamentSubmit(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Submit"), RAYWHITE, 10.0_spD, 0.0));
         Button scouterUpdate(250.0_spX, 40.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Scouter List"), RAYWHITE, 10.0_spD, 0.0));
         DrawableList getMatchList(VERTICAL, 10);
