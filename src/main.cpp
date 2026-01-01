@@ -25,7 +25,6 @@
 #include "myincludes/bluetooth/bluetooth.hpp"
 #include "myincludes/bluetooth/btTabObj.hpp"
 #include "myincludes/bluetooth/bluetoothConductor.hpp"
-#include "include/libusb.h"
 #include "myincludes/qrCodeHandler.hpp"
 #include <iostream>
 #include <fstream>
