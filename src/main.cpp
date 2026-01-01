@@ -1,6 +1,5 @@
 
 #include "include/raylib-cpp.hpp"
-#include "../myincludes/qrcodeScanner.hpp"
 #include "myincludes/allincludes.hpp"
 #include "../myincludes/button.hpp"
 #include "../myincludes/scenes.hpp"
