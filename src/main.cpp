@@ -8,12 +8,13 @@
 #include "myincludes/pong.hpp"
 #include "myincludes/database.hpp"
 #include "myincludes/bluetooth/bluetooth.hpp"
-#include "myincludes/WinsockErrorDesc.hpp"
+#include "myincludes/winsockErrorDesc.hpp"
 #include "myincludes/debugConsole.hpp"
 #include "myincludes/restReqHandler.hpp"
 #include "myincludes/bluetooth/bluetooth.hpp"
 #include "myincludes/bluetooth/btTabObj.hpp"
 #include "myincludes/bluetooth/bluetoothConductor.hpp"
+#include "include/qrcodegen.hpp"
 
 #include "myincludes/guiHandler/guiLib.hpp"
 
@@ -23,6 +24,7 @@
 #include <time.h>
 
 using namespace gui;
+using namespace qrcodegen;
 
 int main() {
     MYSQL_RES res;
