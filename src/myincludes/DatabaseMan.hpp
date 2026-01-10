@@ -4,7 +4,7 @@
 #include "../include/mysql/mysql.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "toastHandler.hpp"
+#include "guiHandler/toastHandler.hpp"
 #include "database.hpp"
 #include "datapointStruct.hpp"
 #include <iostream>

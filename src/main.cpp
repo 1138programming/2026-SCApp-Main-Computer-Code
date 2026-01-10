@@ -1,54 +1,36 @@
-
 #include "include/raylib-cpp.hpp"
-#include "myincludes/allincludes.hpp"
-#include "../myincludes/button.hpp"
-#include "../myincludes/scenes.hpp"
-#include "../myincludes/datapoints.hpp"
+#include "../include/json.hpp"
+#include "myincludes/DatabaseMan.hpp"
+#include "myincludes/jsonParser.hpp"
+#include "myincludes/scenes.hpp"
+#include "myincludes/datapoints.hpp"
 #include "../include/json_fwd.hpp"
-#include "myincludes/texturedButton.hpp"
-#include "myincludes/toastHandler.hpp"
-#include "myincludes/texture.hpp"
 #include "myincludes/pong.hpp"
 #include "myincludes/database.hpp"
-#include "myincludes/graph.hpp"
-#include "myincludes/bluetooth.hpp"
-#include "myincludes/clientForTesting.hpp"
-#include "myincludes/toggle.hpp"
-#include "myincludes/verticalScrollable.hpp"
-#include "myincludes/timer.hpp"
+#include "myincludes/bluetooth/bluetooth.hpp"
 #include "myincludes/WinsockErrorDesc.hpp"
-#include "myincludes/bthSocketHandler.hpp"
-#include "myincludes/movementAnimation.hpp"
 #include "myincludes/debugConsole.hpp"
 #include "myincludes/restReqHandler.hpp"
 #include "myincludes/bluetooth/bluetooth.hpp"
 #include "myincludes/bluetooth/btTabObj.hpp"
 #include "myincludes/bluetooth/bluetoothConductor.hpp"
-#include "myincludes/qrCodeHandler.hpp"
+
+#include "myincludes/guiHandler/guiLib.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <time.h>
 
-
+using namespace gui;
 
 int main() {
     MYSQL_RES res;
-    //  MYSQL_ROWS sqldata;
     MYSQL_ROW row;
     std::string resultstr;
    
     DebugConsole::print("Welcome to the main computer!\n", DBGC_BLUE);
-    // libusb_init_context(NULL, NULL, 0);
-    // libusb_device** connectedDevs;
-    // ssize_t arrSize = libusb_get_device_list(NULL, &connectedDevs);
-    // for (int i = 0; i < arrSize; i++) {
-    //     DebugConsole::println(std::string("USB DEVICE FOUND: ") + std::to_string(libusb_get_device_address(connectedDevs[i])));
-    // }
-
      
-    // DrawableGraph<double, double> graph(200, 200, 400.0_spX, 400.0_spY);
-
     // _____ Constant Things _____
     raylib::Window window(1280,720,"Scouting App Computer UI", FLAG_WINDOW_RESIZABLE);  
         window.SetConfigFlags(FLAG_VSYNC_HINT);
@@ -62,7 +44,6 @@ int main() {
     raylib::Font comicSans(std::string("resources/ComicMono.ttf"));
     raylib::Font spaceMono(std::string("resources/SpaceMono-Bold.ttf"));
     Bluetooth btConn;
-    Client client;
     btConn.initWinsock();
     btConn.initAccept();
 
@@ -229,12 +210,6 @@ int main() {
 
         switch(currentScene) {
             case SCANNING:
-                // calculating
-                // qrScanner.scan();
-                // if (goated.isPressed()) {
-                //     qrScanner.update();
-                // } 
-   
                 if (AmplifyBlue.isPressed()) {
                     try {
                         auto res = database.execQuery("insert into matchtransaction ( MatchId, ScouterID, DataPointID,  DCValue, TeamID,AllianceID) values ( 4,-1,11,'true', -1, 'Blue');", 0);  
@@ -376,12 +351,10 @@ int main() {
         if (currentScene != PONG) {
             tabs.updateAndDraw(raylib::Rectangle(0, 0, GetScreenWidth(), GetScreenHeight() * 0.15));
         }
-//  std::cout << GetFrameTime() << std::endl;
 
         window.DrawFPS();
         toastHandler::update();
-        window.EndDrawing();
-            
+        window.EndDrawing();   
     }
     btConn.killAllSockets();
     WinsockErrorDesc::destroy();

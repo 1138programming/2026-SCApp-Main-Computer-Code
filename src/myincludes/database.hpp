@@ -2,7 +2,7 @@
 #define DATABASE_HPP
 
 #include "../include/mysql/mysql.h"
-#include "toastHandler.hpp"
+#include "guiHandler/toastHandler.hpp"
 #include "debugConsole.hpp"
 
 #include <stdio.h>

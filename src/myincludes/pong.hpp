@@ -1,7 +1,7 @@
 #ifndef PONG_HPP
 #define PONG_HPP
 
-#include "toastHandler.hpp"
+#include "guiHandler/toastHandler.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,8 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../include/raylib-cpp.hpp"
-#include "../myincludes/allincludes.hpp"
-#include "../myincludes/shouldScale.hpp"
+#include "guiHandler/shouldScale.hpp"
 
 
 

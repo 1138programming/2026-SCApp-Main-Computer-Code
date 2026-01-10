@@ -3,7 +3,7 @@
 
 #include "debugConsoleColors.hpp"
 #include "debugLevel.hpp"
-#include "btIncludes.hpp" // just use this header for simplicity sake
+#include "bluetooth/btIncludes.hpp" // just use this header for simplicity sake
 
 #include <iostream>
 #include <sstream>

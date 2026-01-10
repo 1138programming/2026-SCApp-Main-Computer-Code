@@ -85,4 +85,14 @@ const char* operator"" _spD(long double num) {
     return SizeScaling::shouldScaleToCharPtr(true, DIAGDEPENDENT, num);
 }
 
+const char* operator"" _spX(unsigned long long int num) {
+    return SizeScaling::shouldScaleToCharPtr(true, XDEPENDENT, (long double)num);
+}
+const char* operator"" _spY(unsigned long long int num) {
+    return SizeScaling::shouldScaleToCharPtr(true, YDEPENDENT, (long double)num);
+}
+const char* operator"" _spD(unsigned long long int num) {
+    return SizeScaling::shouldScaleToCharPtr(true, DIAGDEPENDENT, (long double)num);
+}
+
 #endif

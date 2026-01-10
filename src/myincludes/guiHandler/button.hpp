@@ -3,8 +3,8 @@
 
 #include "drawable.hpp"
 #include "../include/raylib-cpp.hpp"
-#include "../myincludes/ezText.hpp"
-#include "../myincludes/shouldScale.hpp"
+#include "ezText.hpp"
+#include "shouldScale.hpp"
 
 class Button : public Drawable {
     private:

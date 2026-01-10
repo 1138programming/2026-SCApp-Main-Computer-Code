@@ -1,7 +1,7 @@
 #ifndef BTTABOBJ_HPP
 #define BTTABOBJ_HPP
 
-#include "../btIncludes.hpp"
+#include "btIncludes.hpp"
 #include "../debugConsole.hpp"
 #include "bluetoothTransaction.hpp"
 #include "../../include/raylib.hpp"

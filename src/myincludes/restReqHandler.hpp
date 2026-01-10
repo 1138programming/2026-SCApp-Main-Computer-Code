@@ -12,17 +12,18 @@
 
 class RestReqHandler {
     private:
-    DatabaseMan* database = new DatabaseMan();
-    
-    static size_t readHandler(char* ptr, size_t size, size_t numElements, void* ourPtr) {
-        RestReqHandler* self = (RestReqHandler*)ourPtr;
-        std::string temp = std::string(ptr, size * numElements);
-        self->output.append(temp);
+        DatabaseMan* database = new DatabaseMan();
         
-        return size * numElements;
-    }
+        std::string output; // TODO: causes errors when private?
+        static size_t readHandler(char* ptr, size_t size, size_t numElements, void* ourPtr) {
+            RestReqHandler* self = (RestReqHandler*)ourPtr;
+            std::string temp = std::string(ptr, size * numElements);
+            self->output.append(temp);
+            
+            return size * numElements;
+        }
+        
     public:
-        std::string output; // don't access- it's usually junk data
         /**
          * @brief appends the ```request``` string to after the /v3/ in the link, using the api key given in /src/resources/tbaKey.env
          */
@@ -82,17 +83,18 @@ class RestReqHandler {
         }
         void getteamsatcomphdata(std::string eventkey) {
             JsonParser teamsParser(makeTBAReq(std::string("event/") + eventkey + std::string("/teams")));
-                    std::vector<TEAM_DATAPOINT> teamsList = teamsParser.parseTeams();
-                    if (teamsList.size() >= 1) {
-                        std::ofstream compTeamsFile("resources/csv/teamCompList.csv");
-                        compTeamsFile << std::to_string(teamsList[0].teamNum);
-                        for (int i = 1; i < teamsList.size(); i++) {
-                            compTeamsFile << "," << std::to_string(teamsList[i].teamNum);
-                        }
-                    }
-                    else {
-                        toastHandler::add(Toast("Invalid Comp ID", LENGTH_NORMAL));
-                    }       
+
+            std::vector<TEAM_DATAPOINT> teamsList = teamsParser.parseTeams();
+            if (teamsList.size() >= 1) {
+                std::ofstream compTeamsFile("resources/csv/teamCompList.csv");
+                compTeamsFile << std::to_string(teamsList[0].teamNum);
+                for (int i = 1; i < teamsList.size(); i++) {
+                    compTeamsFile << "," << std::to_string(teamsList[i].teamNum);
+                }
+            }
+            else {
+                toastHandler::add(Toast("Invalid Comp ID", LENGTH_NORMAL));
+            }       
         }
         void deleteteams() {
             database->clearTeams();

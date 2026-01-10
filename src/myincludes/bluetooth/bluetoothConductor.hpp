@@ -13,12 +13,11 @@
 class BluetoothConductor {
     private:
         /*********************************************/
-        /* PRIVATE COMMUNICATION PROTO FUNCs */
+        /* PRIVATE COMMUNICATION PROTO FUNC(S) */
         /*********************************************/
         std::optional<std::vector<char>> returnEmptyVector() {
             return std::nullopt;
         }
-        // to prevent clutter
         void handleWriteTransactions(bt::TABTRANSACTION* trans, std::launch policy) {
             switch (trans->transactionType) {
                 case bt::TRANS_SEND_LOCAL_DB: {
@@ -105,7 +104,6 @@ class BluetoothConductor {
             else {
                 trans->success = true;
                 trans->batmanTrans = false;
-                trans->writeTransaction = false;
 
                 trans->data = std::async(policy, trans->parent->internalRead, trans->parent, std::ref(trans->success));
                 return trans;

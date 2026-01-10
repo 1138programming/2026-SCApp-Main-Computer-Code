@@ -16,7 +16,6 @@ namespace bt {
     
     #include "bthSocketCallingType.hpp"
     #include "bluetoothTransactionType.hpp"
-    #include "bluetooth/bluetoothTransactionType.hpp"
     // #include "debugConsole.hpp"
 
     #define BT_EXPECTED_DATA_INITIAL (sizeof(char))
@@ -33,8 +32,7 @@ namespace bt {
 }
 
 //includes on timeout >:C
-#include "btReadResult.hpp"
-#include "winsockErrorDesc.hpp"
+#include "../winsockErrorDesc.hpp"
 
 template<typename T> void checkSuccessWinsock(T val, T target, std::string errorMessage) {
     if (val != target) {

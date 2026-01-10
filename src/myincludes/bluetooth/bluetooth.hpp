@@ -1,13 +1,12 @@
 #ifndef BLUETOOTH_HPP
 #define BLUETOOTH_HPP
 
-#include "../btIncludes.hpp"
-#include "../bthSocketHandler.hpp"
-#include "../verticalScrollable.hpp"
+#include "btIncludes.hpp"
+#include "../guiHandler/verticalScrollable.hpp"
 #include "../debugConsole.hpp"
 #include "../winsockErrorDesc.hpp"
-#include "../verticalScrollable.hpp"
-#include "../ezText.hpp"
+#include "../guiHandler/verticalScrollable.hpp"
+#include "../guiHandler/ezText.hpp"
 #include "btTabObj.hpp"
 #include "bluetoothConductor.hpp"
 

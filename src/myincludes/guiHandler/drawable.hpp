@@ -8,7 +8,6 @@
 class Drawable {
     protected:
         DISPLAYPOS wantedPos;
-        // using normal raylib struct for compatibility
         Vector2 customTransformation = {0, 0};
     public:
         // meant to be overwritten
@@ -27,7 +26,7 @@ class Drawable {
             this->wantedPos = pos;
         }
         void setCustomOffset(Vector2 transformation) {
-            this->customTransformation = transformation;
+            this->customTransformation = {.x = transformation.x, .y = transformation.y};
         }
 
         // __meant to be overwritten__
