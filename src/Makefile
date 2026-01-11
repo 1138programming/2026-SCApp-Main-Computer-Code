@@ -1,5 +1,6 @@
 # compiler
 CC = g++
+cross: CC = x86_64-w64-mingw32-g++
 LL = ld
 
 #path to raylib
