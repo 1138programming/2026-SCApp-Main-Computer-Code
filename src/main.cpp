@@ -280,7 +280,7 @@ int main() {
                 }
                 if (scouterUpdate.isPressed()) {
                     auto result = database.query("select scouterfirstname, scouterlastname, scouterid from scouter where scouterid>=0");
-                    if (result.size() > 0 && result[0].size() == 3) {
+                    if (result[0].size() == 3) {
                         std::cout << result.size() << ", " << result[0].size();
                         std::ofstream scouterFile("resources/csv/scouterList.csv");
                         scouterFile << result[0][0] << " " << result[0][1] << ":" << result[0][2];

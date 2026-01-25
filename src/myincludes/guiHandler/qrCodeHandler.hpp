@@ -4,6 +4,7 @@
 #include <string>
 #include "../include/qrcodegen.hpp"
 #include "../include/raylib-cpp.hpp"
+#include "../debugConsole.hpp"
 #include "drawable.hpp"
 
 class QrCodeHandler : public Drawable {
@@ -21,7 +22,7 @@ class QrCodeHandler : public Drawable {
 
         void draw(int x, int y) override {
             if (previousSize != (float)size) {
-                std::cout << "haha";
+                DebugConsole::println(std::string("QR Code Resized!"), DBGC_DEFAULT, DBGL_DEVEL);
                 UnloadRenderTexture(this->qrCodeTexture);
                 this->qrCodeTexture = LoadRenderTexture(size, size);
                 this->previousSize = (float)size;
