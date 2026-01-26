@@ -96,6 +96,11 @@ class RestReqHandler {
                 toastHandler::add(Toast("Invalid Comp ID", LENGTH_NORMAL));
             }       
         }
+
+        void getQualMatchData() {
+            
+        }
+
         void deleteteams() {
             database->clearTeams();
         }

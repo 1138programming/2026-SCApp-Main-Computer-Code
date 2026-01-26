@@ -51,12 +51,12 @@ class DatabaseMan {
                 if (i.base() != NULL) {
                     temp = *i.base();
                 
-                    auto notUsed = database.execQuery("insert into matchtransaction ( MatchId, ScouterID, DatapointID,  DCValue, TeamID, AllianceID, DCTimestamp) values (" + temp.matchID + "," + temp.scouterID + "," + temp.datapointID + ",'" + temp.DCValue + "'," +  temp.teamID + ",'" + temp.AllianceId + "'," + temp.DCTimestamp + ");", 1); 
+                    auto notUsed = database.execQuery("insert into matchtransaction ( MatchId, ScouterID, DatapointID, DatapointValue, TeamID, AllianceID, DatapointTimestamp) values (" + temp.MatchID + "," + temp.ScouterID + "," + temp.DatapointID + ",'" + temp.DatapointValue + "'," +  temp.TeamID + ",'" + temp.AllianceID + "'," + temp.DatapointTimestamp+ ");", 1); 
                     
                 }
                 else {
                     DebugConsole::print(std::string("Error inserting datapoints. Base is null ")  + "\n", DBGC_RED);
-                }   
+                }
             }
         }
         else {

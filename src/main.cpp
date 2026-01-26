@@ -129,11 +129,15 @@ int main() {
             getMatchList.add(&tournamentSubmit);
             getMatchList.add(&scouterUpdate);
             getMatchList.setDisplayPos(CENTERED);
-
+        
+        Button matchNumberUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Match Number"), RAYWHITE, 10.0_spD, 0.0));
+            matchNumberUpdate.setDisplayPos(CENTERRIGHT);
 
         dataVisualizationScreen.add(&DB)
             .add(&dataList)
-            .add(&getMatchList).add(&rest);
+            .add(&getMatchList)
+            .add(&rest)
+            .add(&matchNumberUpdate);
             
     // __ BT Scene __
         Empty btTestingScene(raylib::Rectangle(0, GetScreenHeight() * 0.15, GetScreenWidth(), GetScreenHeight()));       
@@ -241,12 +245,12 @@ int main() {
             break;
 
             case DATABASE:
-            if (rest.isPressed()) {
-                handler.deleteteams();
-                for (int i = 0; i < 23; i++) {
-                    handler.getteamdata(i);
-                }              
-            }
+                if (rest.isPressed()) {
+                    handler.deleteteams();
+                    for (int i = 0; i < 23; i++) {
+                        handler.getteamdata(i);
+                    }              
+                }
                  if(DB.isPressed()) {
                     for (int i =1; i<7; i++) {
                         for  (int j =1; j<46; j++) {
@@ -305,6 +309,11 @@ int main() {
                     }
                 }
               
+
+                if (matchNumberUpdate.isPressed()) {
+                    
+                }
+
                 window.BeginDrawing();
                     window.ClearBackground(BLACK);
                     texture.draw(0,0);

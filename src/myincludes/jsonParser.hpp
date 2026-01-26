@@ -39,30 +39,23 @@ class JsonParser {
             std::vector<MATCH_DATAPOINT> datapoints = std::vector<MATCH_DATAPOINT>();  
             try {
                 for (auto it = this->data["scoutingData"].begin(); it != this->data["scoutingData"].end() ; ++it) { 
-                    MATCH_DATAPOINT currentDatapoint;
-                
-                    std::cout << *it << std::endl;
-                    json element = *it;
-                    currentDatapoint.scouterID = element["scouterID"];
-                    currentDatapoint.datapointID = element["datapointID"];
-                    currentDatapoint.teamID = element["teamID"];
-                    currentDatapoint.matchID = element["matchID"];
-                    currentDatapoint.DCValue = element["DCValue"];
-                    std::string stuff = element["DCTimestamp"];
-                    if (stuff == "noShow") {
-                        currentDatapoint.DCTimestamp ="NULL";
-                    }
-                    else {
-                        currentDatapoint.DCTimestamp = ("'" + stuff + "'");
-                    }
-                    currentDatapoint.AllianceId = element["allianceID"];    
-                
-                datapoints.push_back(currentDatapoint);
-            }  
-            // std::cout << "end" <<std::endl; 
+                        MATCH_DATAPOINT currentDatapoint;
+                    
+                        std::cout << *it << std::endl;
+                        json element = *it;
+                        currentDatapoint.ScouterID = element["ScouterID"];
+                        currentDatapoint.DatapointID = element["DatapointID"];
+                        currentDatapoint.TeamID = element["TeamID"];
+                        currentDatapoint.MatchID = element["MatchID"];
+                        currentDatapoint.DatapointValue = element["DatapointValue"];
+                        currentDatapoint.DatapointTimestamp = element["DatapointTimestamp"];
+                        currentDatapoint.AllianceID = element["allianceID"];    
+                    
+                    datapoints.push_back(currentDatapoint);
+                }
             }
             catch (...) {
-                DebugConsole::print(std::string("Error parsing match ") + "\n", DBGC_YELLOW);
+                DebugConsole::println(std::string("Error parsing match "), DBGC_YELLOW);
             }
            
             return datapoints;

@@ -4,13 +4,13 @@
 #include <string>
 
 typedef struct {
-    std::string scouterID;
-    std::string matchID;
-    std::string teamID;
-    std::string datapointID;
-    std::string DCValue;
-    std::string DCTimestamp;
-    std::string AllianceId;
+    std::string ScouterID;
+    std::string MatchID;
+    std::string TeamID;
+    std::string DatapointID;
+    std::string DatapointValue;
+    std::string DatapointTimestamp;
+    std::string AllianceID;
 } MATCH_DATAPOINT;
 
 typedef struct {
