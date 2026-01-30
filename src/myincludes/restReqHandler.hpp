@@ -97,8 +97,10 @@ class RestReqHandler {
             }       
         }
 
-        void getQualMatchData() {
-            
+        void getMatchData(std::string eventKey) {
+            std::string compMatchData = makeTBAReq("");
+            JsonParser parser("");
+
         }
 
         void deleteteams() {

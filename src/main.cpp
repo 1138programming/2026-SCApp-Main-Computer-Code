@@ -3,7 +3,6 @@
 #include "myincludes/DatabaseMan.hpp"
 #include "myincludes/jsonParser.hpp"
 #include "myincludes/scenes.hpp"
-#include "myincludes/datapoints.hpp"
 #include "../include/json_fwd.hpp"
 #include "myincludes/pong.hpp"
 #include "myincludes/database.hpp"
@@ -266,7 +265,6 @@ int main() {
                 if (tournamentSubmit.isPressed()) {
 
                     handler.getteamsatcomphdata(tournamentMatch.getText());
-                    // handler.getmatchdata(tournamentMatch.getText());
                     int a =100;
                     int b =200;
                     int c = 250;
