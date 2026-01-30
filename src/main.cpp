@@ -121,22 +121,25 @@ int main() {
             dataList.setDisplayPos(CENTERLEFT);
         
         TextBox tournamentMatch(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
-        Button tournamentSubmit(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Submit"), RAYWHITE, 10.0_spD, 0.0));
         Button scouterUpdate(250.0_spX, 40.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Scouter List"), RAYWHITE, 10.0_spD, 0.0));
         DrawableList getMatchList(VERTICAL, 10);
             getMatchList.add(&tournamentMatch);
-            getMatchList.add(&tournamentSubmit);
             getMatchList.add(&scouterUpdate);
             getMatchList.setDisplayPos(CENTERED);
         
-        Button matchNumberUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Match Number"), RAYWHITE, 10.0_spD, 0.0));
-            matchNumberUpdate.setDisplayPos(CENTERRIGHT);
+            TextBox matchNumberEvent(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
+            Button matchNumberUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Match Number"), RAYWHITE, 10.0_spD, 0.0));
+            DrawableList matchNumberUpdateList(VERTICAL, 10);
+                matchNumberUpdateList.add(&matchNumberEvent)
+                .add(&matchNumberUpdate);
+    
+            matchNumberUpdateList.setDisplayPos(CENTERRIGHT);
 
         dataVisualizationScreen.add(&DB)
             .add(&dataList)
             .add(&getMatchList)
             .add(&rest)
-            .add(&matchNumberUpdate);
+            .add(&matchNumberUpdateList);
             
     // __ BT Scene __
         Empty btTestingScene(raylib::Rectangle(0, GetScreenHeight() * 0.15, GetScreenWidth(), GetScreenHeight()));       
@@ -262,24 +265,6 @@ int main() {
                         }
                     }                  
                 }
-                if (tournamentSubmit.isPressed()) {
-
-                    handler.getteamsatcomphdata(tournamentMatch.getText());
-                    int a =100;
-                    int b =200;
-                    int c = 250;
-
-                    for (int i=0;i<a;i++) {
-                        database.execQuery("insert into scmatch ( MatchId, BAmatchId, Description) values (" + std::to_string(i) + ",'Practice" +  "','Practice');", 0); 
-                    }
-                    for (int j=a;j<b;j++) {
-                        database.execQuery("insert into scmatch ( MatchId, BAmatchId, Description) values (" + std::to_string(j) + ",'Qual" +  "','Qual');", 0); 
-                    }
-                    for (int k=b;k<c;k++) {
-                        database.execQuery("insert into scmatch ( MatchId, BAmatchId, Description) values (" + std::to_string(k) + ",'Playoff" +  "','Playoff');", 0); 
-                    }
-                    
-                }
                 if (scouterUpdate.isPressed()) {
                     auto result = database.query("select scouterfirstname, scouterlastname, scouterid from scouter where scouterid>=0");
                     if (result[0].size() == 3) {
@@ -309,7 +294,7 @@ int main() {
               
 
                 if (matchNumberUpdate.isPressed()) {
-                    
+                    handler.getMatchData(matchNumberEvent.getText());
                 }
 
                 window.BeginDrawing();

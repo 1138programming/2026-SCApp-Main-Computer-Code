@@ -41,6 +41,8 @@ class QrCodeHandler : public Drawable {
                 EndTextureMode();
             }
 
+
+            //DrawTextureRec(this->qrCodeTexture.texture, (Rectangle) {0, 0, GetScreenHeight(), GetScreenHeight()}, (Vector2) {0.0f, 0.0f}, WHITE);
             DrawTextureRec(this->qrCodeTexture.texture, (Rectangle) { 0, 0, (float)this->qrCodeTexture.texture.width, (float)-this->qrCodeTexture.texture.height}, (Vector2) {(float)x, (float)y}, WHITE);
         }
 

@@ -119,7 +119,7 @@ class BtTabObj {
                     if (currError == WSAEWOULDBLOCK || currError == WSAEINPROGRESS) {
                         continue;
                     }
-                    DebugConsole::println(std::string("Socket communication error. (closing) (error=") + std::to_string(currError) + std::string(")"), DBGC_YELLOW);
+                    DebugConsole::println(std::string("Socket communication error. (closing) (error = ") + std::to_string(currError) + std::string(" (") + WinsockErrorDesc::get(currError).errorName + std::string("))"), DBGC_YELLOW);
                     success = false;
                     return NULL;
                 }

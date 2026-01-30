@@ -10,7 +10,7 @@ class DrawableList : public Drawable {
     private:
         std::vector<Drawable*> thingsToDraw;
         EXPANSIONTYPE expansionType = NONE;
-        bool ignoreChildren = true;
+        bool ignoreChildren = true; // TODO: MAKE USEFUL
         int seperation = 0;
     public:
         // TODO: Add constructor
@@ -23,9 +23,10 @@ class DrawableList : public Drawable {
             this->expansionType = expansionType;
             this->seperation = seperation;
         }
-        void add(void* thingToAdd) {
+        DrawableList& add(void* thingToAdd) {
             Drawable* thingToAddDrawable = (Drawable*)thingToAdd;
             this->thingsToDraw.push_back(thingToAddDrawable);
+            return *this;
         }
 
         void draw(int x, int y) override {

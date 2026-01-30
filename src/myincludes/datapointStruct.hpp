@@ -21,9 +21,9 @@ typedef struct {
 } TEAM_DATAPOINT;
 
 typedef struct {
-    int MatchId;
-    std::string BAmatchId;
-    std::string MatchDesc;
+    std::string tbaMatchID;
+    std::string compLevel;
+    int matchNumber;
 
 } MATCHLIST_DATAPOINT;
 

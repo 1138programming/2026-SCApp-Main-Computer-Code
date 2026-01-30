@@ -4,6 +4,7 @@
 #include "../include/curlIncludes/curl/curl.h"
 
 #include <vector>
+#include <format>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -70,17 +71,6 @@ class RestReqHandler {
             database->setteamdat(teams);
             database->addTeams();        
         }
-        void getmatchdata(std::string eventkey) {
-            std::string pageData = makeTBAReq(std::string("event/") + eventkey + std::string("/matches"));
-            std::ofstream compTeamsFile("resources/csv/matchesList.csv");
-            compTeamsFile << pageData;
-
-            JsonParser parser(pageData); 
-            std::vector<MATCHLIST_DATAPOINT> matchs = parser.parseMatchList();
-
-            database->setmatchlistdat(matchs);
-            database->addMatchList();        
-        }
         void getteamsatcomphdata(std::string eventkey) {
             JsonParser teamsParser(makeTBAReq(std::string("event/") + eventkey + std::string("/teams")));
 
@@ -98,9 +88,25 @@ class RestReqHandler {
         }
 
         void getMatchData(std::string eventKey) {
-            std::string compMatchData = makeTBAReq("");
-            JsonParser parser("");
+            int qualMatchCount = 0;
 
+            JsonParser matchListParser(makeTBAReq(std::string("event/") + eventKey + std::string("/matches/simple")));
+
+            std::vector<MATCHLIST_DATAPOINT> matchDatapoints = matchListParser.parseMatchList();
+            for (MATCHLIST_DATAPOINT datapoint : matchDatapoints) {
+                if (datapoint.compLevel == "qm") {
+                    qualMatchCount++;
+                }
+            }
+
+            if (qualMatchCount < 40) {
+                DebugConsole::println("QUAL MATCHES NOT CORRECTLY COUNTED!!! DEFUALTING TO 150...", DBGC_YELLOW, DBGL_WARNING);
+                qualMatchCount = 150;
+            }
+
+            std::ofstream compMatchNumFile("resources/csv/compMatchNums.csv");
+            compMatchNumFile << qualMatchCount << ",13,3"; // always 13 playoffs & 3 finals...
+            compMatchNumFile.close();
         }
 
         void deleteteams() {

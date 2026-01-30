@@ -21,9 +21,13 @@ class BluetoothConductor {
         void handleWriteTransactions(bt::TABTRANSACTION* trans, std::launch policy) {
             switch (trans->transactionType) {
                 case bt::TRANS_SEND_LOCAL_DB: {
-                    std::string dbFileStr = readWholeFile("resources/csv/scouterList.csv");
-                    dbFileStr.append("\n");
-                    dbFileStr.append(readWholeFile("resources/csv/teamCompList.csv"));
+                    std::ostringstream dbFileStrBuilder;
+                        dbFileStrBuilder << readWholeFile("resources/csv/scouterList.csv")
+                        << "\n"
+                        << readWholeFile("resources/csv/teamCompList.csv")
+                        << "\n"
+                        << readWholeFile("resources/csv/compMatchNums.csv");
+                    std::string dbFileStr = dbFileStrBuilder.str();
 
                     std::vector<char> dbFileArr;
                     for(char i : dbFileStr) {
@@ -36,9 +40,14 @@ class BluetoothConductor {
                     break;
                 }
                 case bt::TRANS_SEND_LOCAL_DB_HASH: {
-                    std::string dbFileStr = readWholeFile("resources/csv/scouterList.csv");
-                    dbFileStr.append("\n");
-                    dbFileStr.append(readWholeFile("resources/csv/teamCompList.csv"));
+                    std::ostringstream dbFileStrBuilder;
+                        dbFileStrBuilder << readWholeFile("resources/csv/scouterList.csv")
+                        << "\n"
+                        << readWholeFile("resources/csv/teamCompList.csv")
+                        << "\n"
+                        << readWholeFile("resources/csv/compMatchNums.csv");
+                    std::string dbFileStr = dbFileStrBuilder.str();
+
                     std::vector<char> dbFileVec;
                     for (char i : dbFileStr) {
                         dbFileVec.push_back(i);
@@ -115,21 +124,22 @@ class BluetoothConductor {
         void handleTransResult(bt::TABTRANSACTION* trans) {
             DebugConsole::println("Transaction result being handled", DBGC_BLUE, DBGL_DEVEL);
             if (trans->writeTransaction) {
+                DebugConsole::println("Transaction is a write transaction, handled.", DBGC_GREEN, DBGL_DEVEL);
                 return;
             }
-
+            
             switch(trans->transactionType) {
                 case bt::TRANS_RECV_MATCH: {
                     std::vector<char> readDataVec = trans->data.get().value();
                     if (trans->success) {
                         std::string data = std::string(readDataVec.begin(), readDataVec.end());
                         std::cerr << data << std::endl;
-                    
+                        
                         // parse data and put it into database
                         JsonParser parser(data);
                         std::vector<MATCH_DATAPOINT> vectData = parser.parseMatch();
                         DatabaseMan databaseCall;
-                            databaseCall.setmatchdata(vectData);
+                        databaseCall.setmatchdata(vectData);
                         databaseCall.addMatchDatapoints();
                     }
                     break;
@@ -137,12 +147,13 @@ class BluetoothConductor {
                 case bt::TRANS_RECV_TABLET_INFO: {
                     std::optional<std::vector<char>> tabletScoutingInfoVec = trans->data.get();
                     if (trans->success && tabletScoutingInfoVec.has_value()) {
-                        std::string tabletScoutingInfo = std::string(tabletScoutingInfoVec.value().begin(),  tabletScoutingInfoVec.value().end());
+                        std::string tabletScoutingInfo = std::string(tabletScoutingInfoVec.value().begin(), tabletScoutingInfoVec.value().end());
                         trans->parent->setScoutingName(tabletScoutingInfo);
                     }
                     break;
                 }
             }
+            DebugConsole::println("Read transaction handled(?)", DBGC_GREEN, DBGL_DEVEL);
         }
 };
 

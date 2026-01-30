@@ -25,7 +25,7 @@ class JsonParser {
             }
             std::ofstream file;
             try {
-                file = std::ofstream("log copy 88889.json");
+                file = std::ofstream("JSONPARSER log.json");
                 file << datan;
                 file.close();
             }
@@ -77,39 +77,31 @@ class JsonParser {
             }
             catch (...) {
                 DebugConsole::print(std::string("Error parsing teams ") +  "\n", DBGC_YELLOW);
-                // toastHandler::add(Toast("fuck. it no workie", LENGTH_NORMAL));
-            }
-            // std::cout << (datapoints.begin().base())->datapointID <<std::endl; 
-             
+            }             
             return Teamsdata;
         }
+        
         std::vector<MATCHLIST_DATAPOINT> parseMatchList() {
             std::vector<MATCHLIST_DATAPOINT> MatchlistData = std::vector<MATCHLIST_DATAPOINT>();  
             try {
-                int i = 0;
                 for (auto it = this->data.begin(); it != this->data.end() ; ++it) { 
                 
                     MATCHLIST_DATAPOINT currentDatapoint; 
                     
                     json element = *it;
-
-                    currentDatapoint.MatchId = i;
-                    (!element["key"].is_null()) ?  currentDatapoint.BAmatchId = element["key"] : currentDatapoint.BAmatchId = "NULL";
-                    (!element["comp_level"].is_null()) ?  currentDatapoint.MatchDesc = element["comp_level"] : currentDatapoint.MatchDesc = "NULL";
+                    (!element["key"].is_null()) ?  currentDatapoint.tbaMatchID = element["key"] : currentDatapoint.tbaMatchID = "NULL";
+                    (!element["comp_level"].is_null()) ?  currentDatapoint.compLevel = element["comp_level"] : currentDatapoint.compLevel = "NULL";
+                    (!element["match_number"].is_null()) ? currentDatapoint.matchNumber = element["match_number"] : currentDatapoint.matchNumber = -1;
                     
                     MatchlistData.push_back(currentDatapoint);  
-                    i++;
                 }
             }
             catch (...) {
                 DebugConsole::print(std::string("Error parsing teams ") +  "\n", DBGC_YELLOW);
-                // toastHandler::add(Toast("fuck. it no workie", LENGTH_NORMAL));
+                return std::vector<MATCHLIST_DATAPOINT>(); // make sure returnee knows error occured
             }
-            // std::cout << (datapoints.begin().base())->datapointID <<std::endl; 
-             
             return MatchlistData;
         }
-
 };
 
 #endif
