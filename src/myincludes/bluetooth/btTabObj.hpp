@@ -298,7 +298,7 @@ class BtTabObj {
            success = true;
            if (!this->sendAck()) {
                success = false;
-               return std::vector<char>();
+               return returnEmptyVector();
             }
             DebugConsole::println("Ack'd tabTrans", DBGC_BLUE, DBGL_DEVEL);
             
@@ -307,7 +307,7 @@ class BtTabObj {
             if (!success) {
                 sendNack();
                 success = false;
-                return std::vector<char>();
+                return returnEmptyVector();
             }
             int bytesExpected = ((int*)numOfByteDataPtr)[0];
             DebugConsole::println(std::string("Num Bytes Expected: ") + std::to_string(bytesExpected), DBGC_BLUE, DBGL_DEVEL);
@@ -316,7 +316,7 @@ class BtTabObj {
             // ack recvd data size
             if (!sendAck()) {
                 success = false;
-                return std::vector<char>();
+                return returnEmptyVector();
             }
             DebugConsole::println(std::string("Ack recvd size correctly"), DBGC_BLUE, DBGL_DEVEL);
             
@@ -324,7 +324,7 @@ class BtTabObj {
             char* messagePtr = readAllSocketData(bytesExpected, success);
             if (!success) {
                 sendNack();
-                return std::vector<char>(); // (success already false)
+                return returnEmptyVector(); // (success already false)
             }
             
             std::vector<char> messageData;

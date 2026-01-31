@@ -330,6 +330,10 @@ class Bluetooth {
             for (int i = 0; i < this->connectedTablets.size(); i++) {
                 this->connectedTablets.at(i).sockSuicide();
             }
+            for (int i = 0; i < this->runningTransactions.size(); i++) {
+                this->runningTransactions.at(i)->data.get(); // since sockets are killed it hopefully(?) should be a fast operation...
+            }
+            this->runningTransactions.clear();
             this->connectedTablets.clear();
         }
 
