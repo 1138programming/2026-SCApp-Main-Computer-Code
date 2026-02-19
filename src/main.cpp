@@ -120,26 +120,26 @@ int main() {
             dataList.add(&submit);
             dataList.setDisplayPos(CENTERLEFT);
         
-        TextBox tournamentMatch(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
+        // TextBox tournamentMatch(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
         Button scouterUpdate(250.0_spX, 40.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Scouter List"), RAYWHITE, 10.0_spD, 0.0));
         DrawableList getMatchList(VERTICAL, 10);
-            getMatchList.add(&tournamentMatch);
+            // getMatchList.add(&tournamentMatch);
             getMatchList.add(&scouterUpdate);
             getMatchList.setDisplayPos(CENTERED);
         
-            TextBox matchNumberEvent(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
-            Button matchNumberUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Match Number"), RAYWHITE, 10.0_spD, 0.0));
-            DrawableList matchNumberUpdateList(VERTICAL, 10);
-                matchNumberUpdateList.add(&matchNumberEvent)
-                .add(&matchNumberUpdate);
+            TextBox tbaDataEvent(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
+            Button tbaDataUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update TBA Data"), RAYWHITE, 10.0_spD, 0.0));
+            DrawableList tbaDataUpdateList(VERTICAL, 10);
+                tbaDataUpdateList.add(&tbaDataEvent)
+                .add(&tbaDataUpdate);
     
-            matchNumberUpdateList.setDisplayPos(CENTERRIGHT);
+            tbaDataUpdateList.setDisplayPos(CENTERRIGHT);
 
         dataVisualizationScreen.add(&DB)
             .add(&dataList)
             .add(&getMatchList)
             .add(&rest)
-            .add(&matchNumberUpdateList);
+            .add(&tbaDataUpdateList);
             
     // __ BT Scene __
         Empty btTestingScene(raylib::Rectangle(0, GetScreenHeight() * 0.15, GetScreenWidth(), GetScreenHeight()));       
@@ -292,9 +292,17 @@ int main() {
                     }
                 }
               
-
-                if (matchNumberUpdate.isPressed()) {
-                    handler.getMatchData(matchNumberEvent.getText());
+                if (tbaDataUpdate.isPressed()) {
+                    std::string validateString = handler.makeTBAReq(std::string("event/") + tbaDataEvent.getText() + std::string("/simple"));
+                    if (!(validateString.length() < 7 || validateString.substr(5, 5) == "Error")) {
+                        handler.getMatchData(tbaDataEvent.getText());
+                        handler.getteamsatcomphdata(tbaDataEvent.getText());
+                        std::ofstream compIDFile("resources/csv/compID.csv");
+                        compIDFile << tbaDataEvent.getText();
+                    }
+                    else {
+                        toastHandler::add(Toast(std::string("EVENT NAME INVALID"), LENGTH_NORMAL));
+                    }
                 }
 
                 window.BeginDrawing();

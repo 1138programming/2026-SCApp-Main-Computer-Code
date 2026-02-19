@@ -26,7 +26,9 @@ class BluetoothConductor {
                         << "\n"
                         << readWholeFile("resources/csv/teamCompList.csv")
                         << "\n"
-                        << readWholeFile("resources/csv/compMatchNums.csv");
+                        << readWholeFile("resources/csv/compMatchNums.csv")
+                        << "\n"
+                        << readWholeFile("resources/csv/compID.csv");
                     std::string dbFileStr = dbFileStrBuilder.str();
 
                     std::vector<char> dbFileArr;
@@ -45,7 +47,9 @@ class BluetoothConductor {
                         << "\n"
                         << readWholeFile("resources/csv/teamCompList.csv")
                         << "\n"
-                        << readWholeFile("resources/csv/compMatchNums.csv");
+                        << readWholeFile("resources/csv/compMatchNums.csv")
+                        << "\n"
+                        << readWholeFile("resources/csv/compID.csv");
                     std::string dbFileStr = dbFileStrBuilder.str();
 
                     std::vector<char> dbFileVec;
