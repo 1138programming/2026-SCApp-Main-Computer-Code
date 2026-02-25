@@ -11,6 +11,7 @@ typedef struct {
     std::string DatapointValue;
     std::string DatapointTimestamp;
     std::string AllianceID;
+    std::string CompID;
 } MATCH_DATAPOINT;
 
 typedef struct {

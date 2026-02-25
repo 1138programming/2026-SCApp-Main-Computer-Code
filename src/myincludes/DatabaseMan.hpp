@@ -43,20 +43,12 @@ class DatabaseMan {
 
     void addMatchDatapoints() {
         if (!datapoints.empty()) {
-            for (auto i = datapoints.begin(); i != datapoints.end(); ++i) {
-                if (i.base() != NULL) {
-                    temp = *i.base();
-                
-                    auto notUsed = database.execQuery("insert into matchtransaction ( MatchId, ScouterID, DatapointID, DatapointValue, TeamID, AllianceID, DatapointTimestamp) values (" + temp.MatchID + "," + temp.ScouterID + "," + temp.DatapointID + ",'" + temp.DatapointValue + "'," +  temp.TeamID + ",'" + temp.AllianceID + "'," + temp.DatapointTimestamp+ ");", 1); 
-                    
-                }
-                else {
-                    DebugConsole::print(std::string("Error inserting datapoints. Base is null ")  + "\n", DBGC_RED);
-                }
+            for (MATCH_DATAPOINT i : this->datapoints) {
+                auto _notUsed = database.query("insert into matchtransaction (UploadID, CompID, MatchID, DatapointID, ScouterID, TeamID, AllianceID, DatapointValue, DatapointTimestamp) values(?,'?','?',?,?,?,?,'?',?)", "0", i.CompID.c_str(), i.MatchID.c_str(), i.DatapointID.c_str(), i.ScouterID.c_str(), i.TeamID.c_str(), i.AllianceID.c_str(), i.DatapointValue.c_str(), i.DatapointTimestamp.c_str());
             }
         }
         else {
-            DebugConsole::print(std::string("Error inserting datapoints. Vector is null ")  + "\n", DBGC_RED);
+            DebugConsole::println(std::string("Error inserting datapoints. Vector is null "), DBGC_RED);
         }
     }
 
@@ -68,9 +60,7 @@ class DatabaseMan {
         if (!teams.empty()) {
             for (auto i = teams.begin(); i != teams.end(); ++i) {
                 if (i.base() != NULL) {
-                    temp2 = *i.base();
-                    // auto insertRes = database.execQuery("insert into team (TeamId, TeamNumber, TeamDesc) values ('" + std::to_string(temp2.teamNum) + "','" + std::to_string(temp2.teamNum) +"','" + std::string(buffer) + "');" , 0);
-                    
+                    temp2 = *i.base();                    
                     std::string teamNum = std::to_string(temp2.teamNum);
                     auto insertRes = database.query("insert into team(TeamId, TeamNumber, TeamDesc) values(?, ?, '?')", teamNum.c_str(), teamNum.c_str(), temp2.teamName.c_str());
                 }

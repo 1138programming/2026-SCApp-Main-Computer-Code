@@ -39,23 +39,22 @@ class JsonParser {
             std::vector<MATCH_DATAPOINT> datapoints = std::vector<MATCH_DATAPOINT>();  
             try {
                 for (auto it = this->data["scoutingData"].begin(); it != this->data["scoutingData"].end() ; ++it) { 
-                        MATCH_DATAPOINT currentDatapoint;
-                    
-                        std::cout << *it << std::endl;
-                        json element = *it;
-                        currentDatapoint.ScouterID = element["ScouterID"];
-                        currentDatapoint.DatapointID = element["DatapointID"];
-                        currentDatapoint.TeamID = element["TeamID"];
+                    MATCH_DATAPOINT currentDatapoint = {};
+                    json element = *it;
+                        currentDatapoint.CompID = element["CompID"];
                         currentDatapoint.MatchID = element["MatchID"];
+                        currentDatapoint.DatapointID = element["DatapointID"];
+                        currentDatapoint.ScouterID = element["ScouterID"];
+                        currentDatapoint.TeamID = element["TeamID"];
+                        currentDatapoint.AllianceID = element["AllianceID"];    
                         currentDatapoint.DatapointValue = element["DatapointValue"];
                         currentDatapoint.DatapointTimestamp = element["DatapointTimestamp"];
-                        currentDatapoint.AllianceID = element["allianceID"];    
                     
                     datapoints.push_back(currentDatapoint);
                 }
             }
             catch (...) {
-                DebugConsole::println(std::string("Error parsing match "), DBGC_YELLOW);
+                DebugConsole::println(std::string("Error parsing match"), DBGC_YELLOW);
             }
            
             return datapoints;
