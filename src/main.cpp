@@ -102,23 +102,16 @@ int main() {
 
     // __  Database Scene __
         Empty dataVisualizationScreen(raylib::Rectangle(0, GetScreenHeight() * 0.15, GetScreenWidth(), GetScreenHeight()));
-        EzText teamdata (raylib::Text(spaceCadet, "Team Data:"), RAYWHITE, 12.0_spD, 0.0);
-        EzText matchdata (raylib::Text(spaceCadet, "Match Data:"), RAYWHITE, 12.0_spD, 0.0);
-        Empty gap (raylib::Rectangle(0, 0, 1, 40));
-        TextBox TeamBox(100.0_spX, 20.0_spY, 10, 0.0, 15.0_spD, &spaceMono, WHITE, WHITE);
-        TextBox MatchBox(100.0_spX, 20.0_spY, 10, 0.0, 15.0_spD, &spaceMono, WHITE, WHITE);
 
-        Button submit (100.0_spX,50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Submit"), RAYWHITE, 10.0_spD, 0.0));
-        DrawableList dataList(VERTICAL, 10);  
-            dataList.add(&teamdata);    
-            dataList.add(&TeamBox);
-         
-            dataList.add(&gap);
-            dataList.add(&matchdata);
-            dataList.add(&MatchBox);
-            dataList.add(&gap);
-            dataList.add(&submit);
-            dataList.setDisplayPos(CENTERLEFT);
+        EzText uploadBatchTitle(raylib::Text(comicSans, "Upload Batch (Leave blank for un-uploaded data)"), RAYWHITE, 24.0_spD, 0.0);
+        TextBox uploadBatchNum(200.0_spX, 40.0_spY, 10, 0.0, 30.0_spD, &spaceMono, WHITE, WHITE);
+
+        Button uploadBatchButton(100.0_spX,50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Upload"), RAYWHITE, 10.0_spD, 0.0));
+        DrawableList uploadBatchList(VERTICAL, 10);  
+            uploadBatchList.add(&uploadBatchTitle);    
+            uploadBatchList.add(&uploadBatchNum);
+            uploadBatchList.add(&uploadBatchButton);
+            uploadBatchList.setDisplayPos(CENTERLEFT);
         
         // TextBox tournamentMatch(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
         Button scouterUpdate(250.0_spX, 40.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update Scouter List"), RAYWHITE, 10.0_spD, 0.0));
@@ -127,16 +120,15 @@ int main() {
             getMatchList.add(&scouterUpdate);
             getMatchList.setDisplayPos(CENTERED);
         
-            TextBox tbaDataEvent(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
-            Button tbaDataUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update TBA Data"), RAYWHITE, 10.0_spD, 0.0));
-            DrawableList tbaDataUpdateList(VERTICAL, 10);
-                tbaDataUpdateList.add(&tbaDataEvent)
-                .add(&tbaDataUpdate);
-    
+        TextBox tbaDataEvent(250.0_spX, 30.0_spY, 15, 0.0, 25.0_spD, &spaceMono, WHITE, WHITE);
+        Button tbaDataUpdate(250.0_spX, 50.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(spaceCadet, "Update TBA Data"), RAYWHITE, 10.0_spD, 0.0));
+        DrawableList tbaDataUpdateList(VERTICAL, 10);
+            tbaDataUpdateList.add(&tbaDataEvent)
+            .add(&tbaDataUpdate);
             tbaDataUpdateList.setDisplayPos(CENTERRIGHT);
 
         dataVisualizationScreen.add(&DB)
-            .add(&dataList)
+            .add(&uploadBatchList)
             .add(&getMatchList)
             .add(&rest)
             .add(&tbaDataUpdateList);
@@ -280,16 +272,8 @@ int main() {
                     }            
                 }
 
-                teamdata.setText("Team Data:" + TeamBox.getText());
-                matchdata.setText("Match Data:" + MatchBox.getText());
-                if(submit.isPressed()) {
-                    auto vector = database.execQuery("select * from matchtransaction where TeamId =" + TeamBox.getText() + " && MatchId = "+ MatchBox.getText() +";", 8);
-                    for (auto i : vector) {
-                        for (std::string j : i) {
-                            std::cout << j << std::endl;
-                        }
-                        std::cout << std::endl;
-                    }
+                if(uploadBatchButton.isPressed()) {
+
                 }
               
                 if (tbaDataUpdate.isPressed()) {

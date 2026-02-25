@@ -48,7 +48,7 @@ class TextBox : public Drawable {
             }
         }
     public:
-        TextBox(ShouldScale width, ShouldScale height, int sizeLimit, ShouldScale spacing,  ShouldScale textSize, raylib::Font* font, raylib::Color fontColor, raylib::Color rectColor) {
+        TextBox(ShouldScale width, ShouldScale height, int sizeLimit, ShouldScale spacing, ShouldScale textSize, raylib::Font* font, raylib::Color fontColor, raylib::Color rectColor) {
             this->width = width;
             this->height = height;
             this->sizeLimit = sizeLimit;
