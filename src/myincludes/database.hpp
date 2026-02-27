@@ -38,6 +38,43 @@ class Database {
             return &this->mysql;
         }
 
+        std::vector<std::string> getHeaders(const char* table, const char* columns = NULL) {
+            int tableNameLen = strlen(table);
+            char* tableEscaped = (char*)malloc((tableNameLen*2)+1); // len reccomended by mysql docs
+            mysql_real_escape_string(&this->mysql, tableEscaped, table, tableNameLen);
+            
+            std::stringstream fullQuery;
+                fullQuery << "SELECT ";
+            
+            if (columns) {
+                int columnsLen = strlen(columns);
+                char* columnsEscaped = (char*)malloc((tableNameLen*2)+1); // len reccomended by mysql docs
+                mysql_real_escape_string(&this->mysql, columnsEscaped, columns, columnsLen);
+                
+                fullQuery << columnsEscaped << " ";
+            }
+            else {
+                fullQuery << "* ";
+            }
+            fullQuery << "FROM " << tableEscaped << " LIMIT 1";
+            
+            if (mysql_query(&this->mysql, fullQuery.str().c_str())) {
+                // ERROR case
+                DebugConsole::println("Failed querying DB!!!");
+                return std::vector<std::string>();
+            }
+
+            std::vector<std::string> columnNames;
+            MYSQL_RES* queryRes = mysql_use_result(&this->mysql);
+            MYSQL_FIELD* currField;
+            while ((currField = mysql_fetch_field(queryRes))) {
+                columnNames.push_back(std::string(currField->name));
+            }
+            
+            mysql_free_result(queryRes);
+            return columnNames;
+        }
+
         std::vector<std::vector<std::string>> query(const char* queryStatement, ...) {
             // query escaping + setup
             va_list queryArgs;
@@ -146,7 +183,6 @@ class Database {
         
         ~Database() {
             mysql_close(&mysql); 
-            
         }
 };
 #endif

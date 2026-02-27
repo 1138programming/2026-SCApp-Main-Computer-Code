@@ -283,6 +283,7 @@ int main() {
                     nlohmann::json jsonToBeSent;
 
                     std::vector<std::vector<std::string>> dbResp = batchDBInst.query("select * from matchtransaction where UploadID=?", batch.c_str());
+                    auto dbColumnNames = batchDBInst.query("");
                     for (int i = 0; i < dbResp.size(); i++) {
                         for (int j = 0; j < dbResp.at(i).size(); j++) {
                             jsonToBeSent[std::to_string(i)][std::to_string(j)] = dbResp.at(i).at(j);
