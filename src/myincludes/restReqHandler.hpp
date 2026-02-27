@@ -10,12 +10,12 @@
 #include <fstream>
 #include <functional>
 
-
+// NOT thread-safe
 class RestReqHandler {
     private:
         DatabaseMan* database = new DatabaseMan();
-        
         std::string output; // TODO: causes errors when private?
+        
         static size_t readHandler(char* ptr, size_t size, size_t numElements, void* ourPtr) {
             RestReqHandler* self = (RestReqHandler*)ourPtr;
             std::string temp = std::string(ptr, size * numElements);
@@ -107,6 +107,43 @@ class RestReqHandler {
             std::ofstream compMatchNumFile("resources/csv/compMatchNums.csv");
             compMatchNumFile << qualMatchCount << ",13,3"; // always 13 playoffs & 3 finals...
             compMatchNumFile.close();
+        }
+
+
+        /*__SEND REQUESTS__*/
+        std::string uploadToBackend(std::string url, std::string data) {
+            CURL* handler = curl_easy_init();
+            curl_slist* headerList = NULL;
+            this->output.clear();
+            if (handler) {
+                curl_easy_setopt(handler, CURLOPT_URL, url.c_str());
+                curl_easy_setopt(handler, CURLOPT_SSL_VERIFYPEER, false);
+
+                std::ifstream authKey("resources/backendKey.env");
+                std::string authStr;
+                if (!authKey.good()) {
+                    DebugConsole::println("ERROR: Unable to make Backend Request. Please add backend api key into /resources/backendKey.env to upload to backend.", DBGC_RED);
+                    return std::string();
+                }
+                std::getline(authKey, authStr);
+                
+                std::string fullHeader = std::string("Auth: ") + authStr;
+                headerList = curl_slist_append(headerList, fullHeader.c_str());
+
+                curl_easy_setopt(handler, CURLOPT_HTTPHEADER, headerList);
+                curl_easy_setopt(handler, CURLOPT_WRITEFUNCTION, readHandler);
+                curl_easy_setopt(handler, CURLOPT_WRITEDATA, this);
+                curl_easy_setopt(handler, CURLOPT_POSTFIELDS, data.c_str());
+
+                CURLcode result = curl_easy_perform(handler);
+                if(result != CURLE_OK) {
+                    DebugConsole::println(std::string("POST Error: ") + std::string(curl_easy_strerror(result)));
+                }
+            
+                curl_easy_cleanup(handler);
+            }
+
+            return this->output;
         }
 
         void deleteteams() {

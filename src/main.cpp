@@ -152,7 +152,7 @@ int main() {
         VerticalScrollable* nameList = btConn.getNameList();
         btTestingScene.add(nameList);
 
-        QrCodeHandler qrCode(btConn.getLocalMacStr() + std::string(";") + std::to_string(btConn.getLocalPort()), qrcodegen::QrCode::Ecc::LOW, ShouldScale(300.0, true, DIAGDEPENDENT));
+        QrCodeHandler qrCode(btConn.getLocalMacStr() + std::string(";") + std::to_string(btConn.getLocalPort()), qrcodegen::QrCode::Ecc::QUARTILE, ShouldScale(400.0, true, YDEPENDENT));
             qrCode.setDisplayPos(TOPCENTERED);
         btTestingScene.add(&qrCode);
 
@@ -273,7 +273,22 @@ int main() {
                 }
 
                 if(uploadBatchButton.isPressed()) {
+                    std::string batch = uploadBatchNum.getText();
+                    if (batch == "") {
+                        batch = std::string("0");
+                    }
+                    
+                    Database batchDBInst;
 
+                    nlohmann::json jsonToBeSent;
+
+                    std::vector<std::vector<std::string>> dbResp = batchDBInst.query("select * from matchtransaction where UploadID=?", batch.c_str());
+                    for (int i = 0; i < dbResp.size(); i++) {
+                        for (int j = 0; j < dbResp.at(i).size(); j++) {
+                            jsonToBeSent[std::to_string(i)][std::to_string(j)] = dbResp.at(i).at(j);
+                        }
+                    }
+                    DebugConsole::println(handler.uploadToBackend("http://localhost/requests/uploadMatchData.php", jsonToBeSent.dump()));
                 }
               
                 if (tbaDataUpdate.isPressed()) {
