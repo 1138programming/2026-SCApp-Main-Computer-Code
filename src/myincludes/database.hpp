@@ -84,7 +84,6 @@ class Database {
             while ((*queryStatement) != '\0') {
                 if ((*queryStatement) == '?') {
                     char* currQuery = va_arg(queryArgs, char*);
-                    DebugConsole::println(std::string("Query Insert Num: ") + std::string(currQuery), DBGC_BLUE);
                     if (currQuery != NULL) {
                         int currQueryLen = strlen(currQuery);
                         char* currQueryEscaped = (char*)malloc((currQueryLen*2)+1); // len reccomended by mysql docs

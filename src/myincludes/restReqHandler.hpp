@@ -123,10 +123,10 @@ class RestReqHandler {
                 std::string authStr;
                 if (!authKey.good()) {
                     DebugConsole::println("ERROR: Unable to make Backend Request. Please add backend api key into /resources/backendKey.env to upload to backend.", DBGC_RED);
-                    return std::string();
+                    return std::string("");
                 }
                 std::getline(authKey, authStr);
-                
+
                 std::string fullHeader = std::string("Auth: ") + authStr;
                 headerList = curl_slist_append(headerList, fullHeader.c_str());
 
@@ -138,12 +138,17 @@ class RestReqHandler {
                 CURLcode result = curl_easy_perform(handler);
                 if(result != CURLE_OK) {
                     DebugConsole::println(std::string("POST Error: ") + std::string(curl_easy_strerror(result)));
+                    return std::string("");
                 }
             
                 curl_easy_cleanup(handler);
             }
 
             return this->output;
+        }
+
+        std::string getFromBackend(std::string url) {
+            return uploadToBackend(url, std::string(""));
         }
 
         void deleteteams() {

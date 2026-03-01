@@ -273,6 +273,7 @@ int main() {
                 }
 
                 if(uploadBatchButton.isPressed()) {
+                    bool success = true;
                     std::string batch = uploadBatchNum.getText();
                     if (batch == "") {
                         batch = std::string("0");
@@ -280,15 +281,39 @@ int main() {
                     
                     Database batchDBInst;
 
-                    nlohmann::json jsonToBeSent;
-
+                    
                     std::vector<std::vector<std::string>> dbResp = batchDBInst.query("select * from matchtransaction where UploadID=?", batch.c_str());
-                    auto dbColumnNames = batchDBInst.query("");
-                    for (int i = 0; i < dbResp.size(); i++) {
-                        for (int j = 0; j < dbResp.at(i).size(); j++) {
-                            jsonToBeSent[std::to_string(i)][std::to_string(j)] = dbResp.at(i).at(j);
+                    if (batch == "0") {
+                        std::string backendNum = handler.getFromBackend("http://localhost/requests/getNextUploadID.php");
+                        if(backendNum == "") {
+                            DebugConsole::println(std::string("BADBADBAD NOT UPLOADED SUCCESSFULLY"), DBGC_RED, DBGL_ERROR);
+                            continue; // pray ts doesn't happen 🙏🙏
+                        }
+                        
+                        DebugConsole::println(std::string("Uploading batch (assigned) #") + backendNum);
+                        batch = backendNum;
+                        for (std::vector<std::string> i : dbResp) {
+                            auto _ = batchDBInst.query("INSERT INTO matchtransaction(UploadID, CompID, MatchID, DatapointID, ScouterID, TeamID, AllianceID, DatapointValue, DatapointTimestamp) VALUES(?,'?','?',?,?,?,?,'?',?)", backendNum.c_str(), i.at(2).c_str(), i.at(3).c_str(), i.at(4).c_str(), i.at(5).c_str(), i.at(6).c_str(), i.at(7).c_str(), i.at(8).c_str(), i.at(9).c_str());
+                            batchDBInst.query("DELETE FROM matchtransaction WHERE UploadID=0");
                         }
                     }
+                    else {
+                        DebugConsole::println(std::string("Uploading batch #") + batch);
+                    }
+                    
+                    nlohmann::json jsonToBeSent;
+                    std::vector<std::string> columnNames = batchDBInst.getHeaders("matchtransaction");
+                    for (int i = 0; i < dbResp.size(); i++) {
+                        for (int j = 0; j < dbResp.at(i).size(); j++) {
+                            if(columnNames.at(j) == std::string("UploadID")) {
+                                jsonToBeSent[i][columnNames.at(j)] = batch;
+                            }
+                            else {
+                                jsonToBeSent[i][columnNames.at(j)] = dbResp.at(i).at(j);
+                            }
+                        }
+                    }
+                    DebugConsole::println("Got Data! :3");
                     DebugConsole::println(handler.uploadToBackend("http://localhost/requests/uploadMatchData.php", jsonToBeSent.dump()));
                 }
               
