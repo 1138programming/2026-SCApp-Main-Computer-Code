@@ -25,6 +25,8 @@
 using namespace gui;
 using namespace qrcodegen;
 
+#define SERVER_UPLOAD_LINK std::string("https://1138-scouting-app.azurewebsites.net/")
+
 int main() {
     MYSQL_RES res;
     MYSQL_ROW row;
@@ -33,7 +35,8 @@ int main() {
     DebugConsole::print("Welcome to the main computer!\n", DBGC_BLUE);
      
     // _____ Constant Things _____
-    raylib::Window window(1280,720,"Scouting App Computer UI", FLAG_WINDOW_RESIZABLE);  
+    std::string title = std::string("Scouting App Computer UI - ") + SERVER_UPLOAD_LINK;
+    raylib::Window window(1280,720,title.c_str(), FLAG_WINDOW_RESIZABLE);  
         window.SetConfigFlags(FLAG_VSYNC_HINT);
         window.SetConfigFlags(FLAG_MSAA_4X_HINT);
         window.SetIcon(raylib::Image("resources/eagleEngineeringLogoLowRes.png"));
@@ -284,7 +287,7 @@ int main() {
                     
                     std::vector<std::vector<std::string>> dbResp = batchDBInst.query("select * from matchtransaction where UploadID=?", batch.c_str());
                     if (batch == "0") {
-                        std::string backendNum = handler.getFromBackend("http://localhost/requests/getNextUploadID.php");
+                        std::string backendNum = handler.getFromBackend(SERVER_UPLOAD_LINK + std::string("requests/getNextUploadID.php"));
                         if(backendNum == "") {
                             DebugConsole::println(std::string("BADBADBAD NOT UPLOADED SUCCESSFULLY"), DBGC_RED, DBGL_ERROR);
                             continue; // pray ts doesn't happen 🙏🙏
@@ -314,7 +317,7 @@ int main() {
                         }
                     }
                     DebugConsole::println("Got Data! :3");
-                    DebugConsole::println(handler.uploadToBackend("http://localhost/requests/uploadMatchData.php", jsonToBeSent.dump()));
+                    DebugConsole::println(handler.uploadToBackend(SERVER_UPLOAD_LINK + std::string("requests/uploadMatchData.php"), jsonToBeSent.dump()));
                 }
               
                 if (tbaDataUpdate.isPressed()) {
