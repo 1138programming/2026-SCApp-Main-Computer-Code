@@ -93,15 +93,17 @@ class BluetoothConductor {
 
             // error cases
             if (trans->transactionType == bt::TRANS_SOCKET_ERROR) {
+                DebugConsole::println("TRANS_SOCKET_ERROR");
                 trans->parent->sendNack(); // honestly could be a bad idea in some scenarios lol
                 trans->success = false;
                 trans->batmanTrans = true;
                 trans->writeTransaction = false;
-
+                
                 trans->parent->sockSuicide();
                 return trans;
             }
             if (trans->transactionType == bt::TRANS_CLOSE_SOCKET) {
+                DebugConsole::println("TRANS_CLOSE_SOCKET");
                 trans->success = false;
                 trans->batmanTrans = true;
                 trans->writeTransaction = false;

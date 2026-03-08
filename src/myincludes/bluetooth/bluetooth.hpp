@@ -258,13 +258,13 @@ class Bluetooth {
 
             for (int i = 0; i < this->connectedTablets.size(); i++) {
                 BtTabObj* tabCurr = &this->connectedTablets.at(i);
-                if (!tabCurr->readyToRead() || tabCurr->undergoingTransaction()) {
+                if ((!tabCurr->readyToRead()) || tabCurr->undergoingTransaction()) {
                     continue;
                 }
                 else {
                     DebugConsole::println(std::string("Tablet #") + std::to_string(i) + std::string(" transaction:"), DBGL_DEVEL);
                     bt::TABTRANSACTION* currTrans = this->conductor.initReadyTransaction(tabCurr->readTransactionData());
-                    if (currTrans->batmanTrans) {
+                    if (currTrans->batmanTrans || currTrans->success == false) {
                         killSocket(currTrans->parent->getWinsockSocket());
                     }
                     else if (currTrans->isReady()) {
@@ -283,11 +283,18 @@ class Bluetooth {
             }
 
             for (int i = 0; i < this->runningTransactions.size(); i++) {
+                if (!this->runningTransactions.at(i)->data.valid()) {
+                    this->runningTransactions.erase(this->runningTransactions.begin() + i);
+                    DebugConsole::println(std::string("TABLET TRANSACTION # ") + std::to_string(i) + std::string(" INVALID!"));
+                    handleRunningTransactions();
+                    break;
+                }
                 if (this->runningTransactions.at(i)->isReady()) {
                     this->conductor.handleTransResult(this->runningTransactions.at(i));
                     this->runningTransactions.at(i)->parent->setTransactionState(false);
                     this->runningTransactions.erase(this->runningTransactions.begin() + i);
                 }
+
             }
         }
         void updateAllBt() {
