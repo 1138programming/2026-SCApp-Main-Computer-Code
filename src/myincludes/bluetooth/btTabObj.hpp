@@ -293,7 +293,6 @@ class BtTabObj {
                     T: # of bytes to be sent (signed int)
                     C: 👍 (ACK)
                     T: all data
-                    C: 👍 (ACK)
             */
            DebugConsole::println("Reading from tablet", DBGC_GREEN, DBGL_DEVEL);
            success = true;
