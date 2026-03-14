@@ -72,10 +72,12 @@ class Bluetooth {
             char* name = (char*)calloc(256, sizeof(char)); // I would rather allocate on heap
             if (name == NULL) {
                 str = "";
+                free(name);
                 return -1;
             }
             if (bt::gethostname(name, 256) != 0) {
                 str = "";
+                free(name);
                 return -2;
             }
 
