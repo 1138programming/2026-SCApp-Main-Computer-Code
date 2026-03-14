@@ -206,7 +206,7 @@ class Bluetooth {
                 sdpRegistration.dwSize = sizeof(bt::WSAQUERYSETA); // for versioning
                 sdpRegistration.lpszServiceInstanceName = (bt::LPSTR)lpszServiceInstanceNameLocal.c_str(); // name of service (not super important for our use-case)
                 sdpRegistration.lpServiceClassId = (bt::LPGUID)&MY_GUID; // register a UUID for our service so the tablets can find it
-                sdpRegistration.lpszComment = (bt::LPSTR)L"Registration for scouting app";
+                sdpRegistration.lpszComment = (bt::LPSTR)"Registration for scouting app";
                 sdpRegistration.dwNameSpace = NS_BTH; // obv.
                 sdpRegistration.lpNSProviderId = NULL; // this doesn't need to be set if dwNameSpace is
                 sdpRegistration.dwNumberOfProtocols = 0; // ignored

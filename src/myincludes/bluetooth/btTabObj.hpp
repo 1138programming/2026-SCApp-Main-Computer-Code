@@ -99,6 +99,7 @@ class BtTabObj {
             size_t dataRecvd = 0;
             while (dataRecvd < sizeExpected) {
                 size_t currentLenRecvd = bt::recv(this->socket, dataPtr, sizeExpected-dataRecvd, 0);
+                DebugConsole::println("Data received so far: " + std::to_string(dataRecvd), DBGC_GREEN);
                 if (currentLenRecvd > 0 && currentLenRecvd != SOCKET_ERROR) {
                     timeoutTime = (GetTime() + 15.0);
                 }
