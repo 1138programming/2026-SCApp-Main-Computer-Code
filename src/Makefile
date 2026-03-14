@@ -32,3 +32,5 @@ debug:
 	$(CC) $(CPPFLAGS) $(DEBUG)
 cross:
 	$(CC) $(MAINFILE) -o $(NAME) -O3 -Wall -I /usr/share/mingw-w64/include/ -I include/ -lm -L lib/ -lraylib -lopengl32 -lgdi32 -lwinmm -lraylibdll -lmariadb -mwindows -lws2_32 -lbthprops -lcurl-x64 -lqrcodegencpp -static-libgcc -static-libstdc++ --static
+drmem:
+	$(CC) $(NOWARN) -static-libgcc -static-libstdc++ -gdwarf-2

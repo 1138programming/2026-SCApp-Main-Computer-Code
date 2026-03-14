@@ -106,12 +106,14 @@ class BtTabObj {
                 if (GetTime() > timeoutTime) {
                     DebugConsole::println("Communication with tab timed out.", DBGC_RED, DBGL_ERROR);
                     success = false;
+                    free(dataPtrStart);
                     return NULL;
                 }
                 // Windows detected a graceful close 🥰
                 if (currentLenRecvd == 0) {
                     DebugConsole::println("BLUETOOTH SOCKET CLOSED: the tablet's fault", DBGC_YELLOW);
                     success = false;
+                    free(dataPtrStart);
                     return NULL;
                 }
                 // Error handling (only some are actually a problem)
@@ -123,6 +125,7 @@ class BtTabObj {
                     }
                     DebugConsole::println(std::string("Socket communication error. (closing) (error = ") + std::to_string(currError) + std::string(" (") + WinsockErrorDesc::get(currError).errorName + std::string("))"), DBGC_YELLOW);
                     success = false;
+                    free(dataPtrStart);
                     return NULL;
                 }
                 dataRecvd += currentLenRecvd;
@@ -212,7 +215,10 @@ class BtTabObj {
             if (!success) {
                 return false;
             }
-            return (strncmp(ackData, dataRecvd, BT_TAB_ACK_SIZE) == 0);
+            bool ackRecvd = (strncmp(ackData, dataRecvd, BT_TAB_ACK_SIZE) == 0);
+            free(ackData);
+            free(dataRecvd);
+            return ackRecvd;
         }
 
 
