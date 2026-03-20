@@ -78,7 +78,7 @@ class BluetoothConductor {
 
                     Database db;
                     for (int i = 0; i < matchesVec->size(); i++) {
-                        if (db.query("SELCT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?'", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str()).size() < 1) {
+                        if (db.query("SELCT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?';", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str()).at(0).size() < 1) {
                             unrecvdMatches.push_back(i);
                         }
                     }
@@ -199,7 +199,7 @@ class BluetoothConductor {
                         size_t secondSemicolon = currLine.find(';', firstSemicolon+1);
                         bt::MatchIdentifier currMatch;
                             currMatch.comp = currLine.substr(0, firstSemicolon);
-                            currMatch.team = currLine.substr(firstSemicolon+1, secondSemicolon);
+                            currMatch.team = currLine.substr(firstSemicolon+1, secondSemicolon - 1);
                             currMatch.match = currLine.substr(secondSemicolon+1);
                         matchIdenVecPtr->push_back(currMatch);
                     }
