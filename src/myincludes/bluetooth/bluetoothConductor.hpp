@@ -199,7 +199,7 @@ class BluetoothConductor {
                         size_t secondSemicolon = currLine.find(';', firstSemicolon+1);
                         bt::MatchIdentifier currMatch;
                             currMatch.comp = currLine.substr(0, firstSemicolon);
-                            currMatch.team = currLine.substr(firstSemicolon+1, secondSemicolon - 1);
+                            currMatch.team = currLine.substr(firstSemicolon+1, secondSemicolon-firstSemicolon-1);
                             currMatch.match = currLine.substr(secondSemicolon+1);
                         matchIdenVecPtr->push_back(currMatch);
                     }
