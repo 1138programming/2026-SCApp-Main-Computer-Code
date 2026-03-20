@@ -78,7 +78,8 @@ class BluetoothConductor {
 
                     Database db;
                     for (int i = 0; i < matchesVec->size(); i++) {
-                        if (db.query("SELCT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?';", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str()).size() < 1) {
+                        std::vector<std::vector<std::string>> result = db.query("SELECT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?';", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str());
+                        if (result.empty()) {
                             unrecvdMatches.push_back(i);
                         }
                     }
