@@ -78,7 +78,7 @@ class BluetoothConductor {
 
                     Database db;
                     for (int i = 0; i < matchesVec->size(); i++) {
-                        if (db.query("SELCT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?';", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str()).at(0).size() < 1) {
+                        if (db.query("SELCT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?';", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str()).size() < 1) {
                             unrecvdMatches.push_back(i);
                         }
                     }
