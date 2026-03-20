@@ -5,6 +5,7 @@
 #include "../debugConsole.hpp"
 #include "bluetoothTransaction.hpp"
 #include "../../include/raylib.hpp"
+#include "btMatchIdentifier.hpp"
 
 #include <vector>
 #include <optional>
@@ -16,6 +17,7 @@ class BtTabObj {
         bt::SOCKET socket;
         bt::SOCKETCALLTYPE callType = bt::CALLTYPE_DEFAULT;
         bt::TABTRANSACTION currTrans;
+        std::vector<bt::MatchIdentifier> tabletMatches;
 
         std::string tabScoutingName = std::string("NULL");
         bool transactionState = false;
@@ -410,6 +412,10 @@ class BtTabObj {
 
         bt::SOCKET getWinsockSocket() {
             return this->socket;
+        }
+
+        std::vector<bt::MatchIdentifier>* getMatchIdentifierVecPtr() {
+            return &this->tabletMatches;
         }
 
 

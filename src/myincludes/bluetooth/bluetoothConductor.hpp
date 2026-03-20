@@ -5,10 +5,12 @@
 #include "../jsonParser.hpp"
 #include "../DatabaseMan.hpp"
 #include "../murmurHash2Neutral.hpp"
+#include "../database.hpp"
 
 #include <vector>
 #include <optional>
 #include <fstream>
+#include <sstream>
 
 class BluetoothConductor {
     private:
@@ -68,6 +70,33 @@ class BluetoothConductor {
                     trans->writeTransaction = true;
 
                     trans->data = std::async(policy, trans->parent->internalWrite, trans->parent, murmurHashData, std::ref(trans->success));
+                    break;
+                }
+                case bt::TRANS_SEND_TAB_UNRECVD_MATCHES: {
+                    std::vector<bt::MatchIdentifier>* matchesVec = trans->parent->getMatchIdentifierVecPtr();
+                    std::vector<int> unrecvdMatches;
+
+                    Database db;
+                    for (int i = 0; i < matchesVec->size(); i++) {
+                        if (db.query("SELCT * FROM matchtransaction WHERE CompID='?' AND TeamID=? AND MatchID='?'", matchesVec->at(i).comp.c_str(), matchesVec->at(i).team.c_str(), matchesVec->at(i).match.c_str()).size() < 1) {
+                            unrecvdMatches.push_back(i);
+                        }
+                    }
+
+                    std::ostringstream unrecvdMatchesTxt;
+                    for (int i = 0; i < unrecvdMatches.size(); i++) {
+                        unrecvdMatchesTxt << unrecvdMatches.at(i);
+                        if (i != unrecvdMatches.size()-1) {
+                            unrecvdMatchesTxt << ",";
+                        }
+                    }
+                    std::string unrecvdMatchesStr = unrecvdMatchesTxt.str();
+                    std::vector<char> unrecvdMatchesTxtVec(unrecvdMatchesStr.begin(), unrecvdMatchesStr.end());
+                    
+                    trans->batmanTrans = false;
+                    trans->writeTransaction = true;
+                    trans->data = std::async(policy, trans->parent->internalWrite, trans->parent, unrecvdMatchesTxtVec, std::ref(trans->success));
+
                     break;
                 }
             }
@@ -155,6 +184,24 @@ class BluetoothConductor {
                     if (trans->success && tabletScoutingInfoVec.has_value()) {
                         std::string tabletScoutingInfo = std::string(tabletScoutingInfoVec.value().begin(), tabletScoutingInfoVec.value().end());
                         trans->parent->setScoutingName(tabletScoutingInfo);
+                    }
+                    break;
+                }
+                case bt::TRANS_RECV_TAB_MATCH_LIST: {
+                    std::vector<bt::MatchIdentifier>* matchIdenVecPtr = trans->parent->getMatchIdentifierVecPtr();
+                    std::vector<char> readDataVec = trans->data.get().value();
+                    std::string matchesStr(readDataVec.begin(), readDataVec.end());
+                    std::istringstream matchesStream(matchesStr);
+                    
+                    std::string currLine;
+                    while (std::getline(matchesStream, currLine)) {
+                        size_t firstSemicolon = currLine.find(';');
+                        size_t secondSemicolon = currLine.find(';', firstSemicolon+1);
+                        bt::MatchIdentifier currMatch;
+                            currMatch.comp = currLine.substr(0, firstSemicolon);
+                            currMatch.team = currLine.substr(firstSemicolon+1, secondSemicolon);
+                            currMatch.match = currLine.substr(secondSemicolon+1);
+                        matchIdenVecPtr->push_back(currMatch);
                     }
                     break;
                 }
