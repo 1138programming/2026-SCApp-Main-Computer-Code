@@ -6,6 +6,7 @@
 #include "bluetoothTransaction.hpp"
 #include "../../include/raylib.hpp"
 #include "btMatchIdentifier.hpp"
+#include "../guiHandler/button.hpp"
 
 #include <vector>
 #include <optional>
@@ -21,6 +22,8 @@ class BtTabObj {
 
         std::string tabScoutingName = std::string("NULL");
         bool transactionState = false;
+
+        Button killButton;
 
         /*********************************************/
         /* PRIVATE COMMUNICATION PROTO PRIMATIVES */
@@ -40,7 +43,7 @@ class BtTabObj {
         }
         
     public:
-        BtTabObj(bt::SOCKET socket, bt::SOCKADDR_BTH addr, std::string addrStr) {
+        BtTabObj(bt::SOCKET socket, bt::SOCKADDR_BTH addr, std::string addrStr) : killButton(100.0_spX, 40.0_spY, RAYWHITE, BLACK, DARKGRAY, EzText(raylib::Text(GetFontDefault(), "Remove Tab"), RAYWHITE, 15.0_spD, 0.0)) {
             this->socket = socket;
             this->macAddr = addr;
             this->macStr = addrStr;
@@ -416,6 +419,10 @@ class BtTabObj {
 
         std::vector<bt::MatchIdentifier>* getMatchIdentifierVecPtr() {
             return &this->tabletMatches;
+        }
+
+        Button* getKillButtonPtr() {
+            return &this->killButton;
         }
 
 

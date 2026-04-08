@@ -7,6 +7,7 @@
 #include "../winsockErrorDesc.hpp"
 #include "../guiHandler/verticalScrollable.hpp"
 #include "../guiHandler/ezText.hpp"
+#include "../guiHandler/button.hpp"
 #include "btTabObj.hpp"
 #include "bluetoothConductor.hpp"
 
@@ -314,6 +315,14 @@ class Bluetooth {
                 this->names.emplace_back(raylib::Text(this->connectedTablets.at(i).getScoutingName()), RAYWHITE, 25.0_spX, 1.0);
                 this->names.at(i).setCustomOffset(raylib::Vector2(2.0, 0.0));
                 listVector->push_back(&this->names.at(i));
+
+                Button* currKillBtn = this->connectedTablets.at(i).getKillButtonPtr();
+                listVector->push_back(currKillBtn);
+                if (currKillBtn->isPressed()) {
+                    DebugConsole::println("AAAAAAAA");
+                    killSocket(this->connectedTablets.at(i).getWinsockSocket());
+                    getNameList();
+                }
             }
             return &this->nameList;
         }
