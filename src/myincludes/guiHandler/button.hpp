@@ -60,6 +60,23 @@ class Button : public Drawable {
             this->lastClickState = clickState;
             return retval;
         }
+        bool isReleased() {
+            if (isDisabled()) {
+                return false;
+            }
+
+            bool down = (isHovering() && IsMouseButtonDown(MOUSE_BUTTON_LEFT));
+            bool up   = (isHovering() && IsMouseButtonReleased(MOUSE_BUTTON_LEFT));
+
+            // A release counts only if the button was previously pressed while hovering
+            bool retval = (up && this->lastClickState);
+
+            // Update lastClickState to track down/up transitions
+            this->lastClickState = down;
+
+            return retval;
+        }
+
 
         void setDisabled(bool state) {
             this->disabled = state;

@@ -311,6 +311,9 @@ class Bluetooth {
             listVector->clear();
             this->names.clear();
             this->names.reserve(this->connectedTablets.size());
+
+            int killIndex = -1;
+
             for (int i = 0; i < this->connectedTablets.size(); i++) {
                 this->names.emplace_back(raylib::Text(this->connectedTablets.at(i).getScoutingName()), RAYWHITE, 25.0_spX, 1.0);
                 this->names.at(i).setCustomOffset(raylib::Vector2(2.0, 0.0));
@@ -318,12 +321,17 @@ class Bluetooth {
 
                 Button* currKillBtn = this->connectedTablets.at(i).getKillButtonPtr();
                 listVector->push_back(currKillBtn);
-                if (currKillBtn->isPressed()) {
+                if (currKillBtn->isReleased()) {
                     DebugConsole::println("AAAAAAAA");
-                    killSocket(this->connectedTablets.at(i).getWinsockSocket());
-                    getNameList();
+                    killIndex = i;
                 }
             }
+
+            if(killIndex != -1) {
+                killSocket(this->connectedTablets.at(killIndex).getWinsockSocket());
+                return getNameList();
+            }
+
             return &this->nameList;
         }
 
