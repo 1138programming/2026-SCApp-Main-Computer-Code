@@ -317,6 +317,7 @@ int main() {
                         }
                     }
                     DebugConsole::println("Got Data! :3");
+                    DebugConsole::println("Number of rows: " + std::to_string(dbResp.size()));
                     DebugConsole::println(handler.uploadToBackend(SERVER_UPLOAD_LINK + std::string("requests/uploadMatchData.php"), jsonToBeSent.dump()));
                 }
               
