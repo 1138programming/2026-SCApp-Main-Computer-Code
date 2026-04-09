@@ -14,7 +14,7 @@ class Button : public Drawable {
         raylib::Color borderColor, hoverColor, backgroundColor;
         bool lastClickState = false;
         bool disabled = false;
-        public:
+    public:
         Button(ShouldScale width, ShouldScale height, raylib::Color borderColor, raylib::Color backgroundColor, raylib::Color hoverColor, EzText text) {
             this->width = width;
             this->height = height;
@@ -129,6 +129,10 @@ class Button : public Drawable {
             textY += y;
 
             this->text.draw(textX, textY);
+        }
+
+        EzText getText() {
+            return (this->text);
         }
         ShouldScale getWidth() override {
             return (this->width);
